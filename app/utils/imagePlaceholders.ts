@@ -1,0 +1,1 @@
+export const teamImagePlaceHolder: string = "https://cdn.sportmonks.com/images/soccer/team_placeholder.png"
