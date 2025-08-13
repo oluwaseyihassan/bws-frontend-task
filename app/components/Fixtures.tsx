@@ -23,7 +23,7 @@ const Fixtures = () => {
   //   ? searchDate
   //   : formatDate(new Date(), "yyyy-MM-dd");
 
-  const { data, error, isLoading, isFetching } = useQuery<FixturesResponse>({
+  const { data, error, isFetching } = useQuery<FixturesResponse>({
     queryKey: ["predictions", selectedDate],
     queryFn: () => getPredictions(selectedDate),
     refetchOnMount: false,
