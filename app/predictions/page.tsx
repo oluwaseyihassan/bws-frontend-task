@@ -1,6 +1,5 @@
 import React from "react";
 import { getPredictions } from "../api/queries";
-import Calendar from "../components/Calendar";
 import { getQueryClient } from "../get-query-client";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import Fixtures from "../components/Fixtures";

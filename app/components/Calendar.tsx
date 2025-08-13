@@ -27,7 +27,6 @@ interface CalendarProps {
 const Calendar = ({
   selectedDate,
   setSelectedDate,
-  isCalendarOpen,
   setIsCalendarOpen,
 }: CalendarProps) => {
   const searchParams = useSearchParams();

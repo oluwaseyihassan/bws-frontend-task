@@ -7,8 +7,6 @@ import Calendar from "./Calendar";
 import { formatDate } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { validateDate } from "../utils/validator";
-import Image from "next/image";
-import { teamImagePlaceHolder } from "../utils/imagePlaceholders";
 import FixtureCard from "./FixtureCard";
 
 const Fixtures = () => {
