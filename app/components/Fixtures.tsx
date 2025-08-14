@@ -37,7 +37,7 @@ const Fixtures = () => {
   });
 
   return (
-    <div className="bg-dark-bg-1 rounded-lg sm:p-4">
+    <div className="bg-dark-bg-1 rounded-lg sm:p-4 p-2">
       <div className="">
         <div
           onClick={() => {
@@ -57,7 +57,7 @@ const Fixtures = () => {
           />
         )}
       </div>
-      <h1 className="font-bold text-2xl text-center">Fixtures</h1>
+      <h1 className="font-bold text-2xl text-center mb-4">Fixtures</h1>
 
       {!isDateValid && searchDate && (
         <div className="text-yellow-600 text-center mb-2">

@@ -18,7 +18,7 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
     <div className="mb-4 p-4 bg-dark-bg shadow rounded-lg ">
       <div className="flex justify-between items-center py-1">
         <div className="flex items-center gap-x-2 ">
-          <div className="h-7 w-7 rounded-full overflow-hidden">
+          <div className="h-6 w-6 rounded-full overflow-hidden">
             <Image
               src={fixture.league.country.image_path || teamImagePlaceHolder}
               alt={fixture.league.country.name}
@@ -27,15 +27,21 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
               className="object-cover w-full h-full"
             />
           </div>
-          {fixture.league.name}
+          <div className="text-xs">
+            <div>{fixture.league.name}</div>
+            <div>{fixture.league.country.name}</div>
+          </div>
         </div>
-        <button onClick={() => setShowMatchDetails?.(fixture)} className=" text-lg rounded-md px-2 py-1">
+        <button
+          onClick={() => setShowMatchDetails?.(fixture)}
+          className=" text-lg rounded-md px-2 py-1"
+        >
           <FaCircleInfo />
         </button>
       </div>
-      <div className="flex items-center py-1 ">
-        <div className="flex gap-x-2 items-center justify-end w-2/5 text-center">
-          <div>
+      <div className="flex items-center py-2 gap-x-2">
+        <div className="flex gap-x-2 items-center justify-end w-2/5 text-center flex-col-reverse sm:flex-row">
+          <div className="sm:text-base text-sm">
             {fixture.participants?.find((team) => team.meta.location === "home")
               ?.name || "Home Team"}
           </div>
@@ -47,8 +53,8 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
                 )?.image_path || teamImagePlaceHolder
               }
               alt="Home Team Logo"
-              width={30}
-              height={30}
+              width={20}
+              height={20}
               onError={(e) => {
                 e.currentTarget.src = teamImagePlaceHolder;
               }}
@@ -56,10 +62,10 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
             />
           </div>
         </div>
-        <div className="flex-1 text-center">
-          <div>{formatDate(fixture.starting_at, "HH:mm")}</div>
+        <div className="flex-1 text-center flex justify-center">
+          <div className="bg-dark-bg-1 rounded py-1 px-3 w-fit">{formatDate(fixture.starting_at, "HH:mm")}</div>
         </div>
-        <div className="flex gap-x-2 items-center w-2/5 text-center">
+        <div className="flex gap-x-2 items-center w-2/5 text-center flex-col sm:flex-row">
           <div>
             <Image
               src={
@@ -68,8 +74,8 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
                 )?.image_path || teamImagePlaceHolder
               }
               alt="Away Team Logo"
-              width={30}
-              height={30}
+              width={20}
+              height={20}
               onError={(e) => {
                 e.currentTarget.src = teamImagePlaceHolder;
               }}
@@ -77,7 +83,7 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
             />
           </div>
 
-          <div>
+          <div className="sm:text-base text-sm max-w-4/5">
             {fixture.participants?.find((team) => team.meta.location === "away")
               ?.name || "Away Team"}
           </div>
@@ -87,12 +93,20 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
         {fixture.predictions?.map((prediction) => (
           <div key={prediction.id} className="">
             <div className="flex justify-between text-sm mb-1 text-gray-300">
-              <span className="w-2/5 flex justify-end">
-                Home: {prediction.predictions.home}%
+              <span className="sm:w-2/5 w-1/3 flex sm:justify-end justify-center">
+                <span className="sm:block hidden mr-1">Home: </span>{" "}
+                <span className="sm:hidden block mr-1">H: </span>{" "}
+                <span> {prediction.predictions.home}%</span>
               </span>
-              <span>Draw: {prediction.predictions.draw}%</span>
-              <span className="w-2/5 flex">
-                Away: {prediction.predictions.away}%
+              <span className="sm:1/5 w-1/3 flex justify-center">
+                <span className="sm:block hidden mr-1">Draw: </span>{" "}
+                <span className="sm:hidden block mr-1">D: </span>{" "}
+                <span>{prediction.predictions.draw}%</span>
+              </span>
+              <span className="sm:w-2/5 w-1/3 flex sm:justify-start justify-center">
+                <span className="sm:block hidden mr-1">Away: </span>{" "}
+                <span className="sm:hidden block mr-1">A: </span>{" "}
+                <span> {prediction.predictions.away}%</span>
               </span>
             </div>
           </div>
