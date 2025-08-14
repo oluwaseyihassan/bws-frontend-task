@@ -1,16 +1,15 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { getPredictions } from "../api/queries";
+import { getPredictions, getFixturesByName } from "../api/queries";
 import type { Fixtures, FixturesResponse } from "../types/types";
 import Calendar from "./Calendar";
 import { formatDate } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { validateDate } from "../utils/validator";
 import FixtureCard from "./FixtureCard";
-import Image from "next/image";
-import { teamImagePlaceHolder } from "../utils/imagePlaceholders";
-import { IoIosCalendar } from "react-icons/io";
+import MatchDetailsModal from "./MatchDetailsModal";
+import { IoIosCalendar, IoMdStarOutline, IoMdClose } from "react-icons/io";
 
 const Fixtures = () => {
   const searchParams = useSearchParams();
@@ -20,273 +19,217 @@ const Fixtures = () => {
   const [showMatchDetails, setShowMatchDetails] = useState<Fixtures | null>(
     null
   );
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isSearchMode, setIsSearchMode] = useState<boolean>(false);
 
   const [selectedDate, setSelectedDate] = useState<string>(
     isDateValid ? searchDate : formatDate(new Date(), "yyyy-MM-dd")
   );
 
-  // const validDate = isDateValid
-  //   ? searchDate
-  //   : formatDate(new Date(), "yyyy-MM-dd");
-
-  const { data, error, isFetching } = useQuery<FixturesResponse>({
+  // Query for date-based fixtures
+  const {
+    data: dateData,
+    error: dateError,
+    isFetching: dateIsFetching,
+  } = useQuery<FixturesResponse>({
     queryKey: ["predictions", selectedDate],
     queryFn: () => getPredictions(selectedDate),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    enabled: !isSearchMode,
   });
+
+  // Query for search-based fixtures
+  const {
+    data: searchData,
+    error: searchError,
+    isFetching: searchIsFetching,
+  } = useQuery<FixturesResponse>({
+    queryKey: ["fixtures", searchQuery],
+    queryFn: () => getFixturesByName(searchQuery),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    enabled: isSearchMode && searchQuery.length > 2,
+  });
+
+  // Use appropriate data based on mode
+  const data = isSearchMode ? searchData : dateData;
+  const error = isSearchMode ? searchError : dateError;
+  const isFetching = isSearchMode ? searchIsFetching : dateIsFetching;
+
+  console.log(searchData)
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim().length > 2) {
+      setIsSearchMode(true);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setIsSearchMode(false);
+  };
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    // Auto-search when typing stops
+    if (value.length === 0) {
+      setIsSearchMode(false);
+    } else if (value.length > 2) {
+      setIsSearchMode(true);
+    }
+  };
 
   return (
     <div className="bg-dark-bg-1 rounded-lg sm:p-4 p-2">
-      <div className="">
-        <div
-          onClick={() => {
-            setIsCalendarOpen(!isCalendarOpen);
-          }}
-          className="cursor-pointer border border-gray-400/40 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200 w-fit flex items-center gap-x-2"
-        >
-          <IoIosCalendar />
-          {formatDate(selectedDate, "MMMM d, yyyy")}
-        </div>
-        {isCalendarOpen && (
-          <Calendar
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            isCalendarOpen={isCalendarOpen}
-            setIsCalendarOpen={setIsCalendarOpen}
-          />
-        )}
-      </div>
-      <h1 className="font-bold text-2xl text-center mb-4">Fixtures</h1>
+      {/* Search and Date Controls */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
 
-      {!isDateValid && searchDate && (
+        
+        {/* Date Picker - Only show when not in search mode */}
+        {!isSearchMode && (
+          <div>
+            <div
+              onClick={() => {
+                setIsCalendarOpen(!isCalendarOpen);
+              }}
+              className="cursor-pointer border border-gray-400/40 text-white px-4 py-2 rounded-lg shadow-md hover:bg-accent transition-colors duration-200 w-fit flex items-center gap-x-2"
+            >
+              <IoIosCalendar />
+              {formatDate(selectedDate, "MMMM d, yyyy")}
+            </div>
+            {isCalendarOpen && (
+              <Calendar
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                isCalendarOpen={isCalendarOpen}
+                setIsCalendarOpen={setIsCalendarOpen}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Search Bar */}
+        <div className="flex-1">
+          <form onSubmit={handleSearch} className="relative">
+            <div className="relative">
+              <IoMdStarOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                placeholder="Search fixtures by team name..."
+                className="w-full pl-10 pr-10 py-2 border border-gray-400/40 rounded-lg bg-dark-bg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={handleClearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                >
+                  <IoMdClose />
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* Title */}
+      <h1 className="font-bold text-2xl text-center mb-4">
+        {isSearchMode ? `Search Results for "${searchQuery}"` : "Fixtures"}
+      </h1>
+
+      {/* Search mode indicator */}
+      {isSearchMode && (
+        <div className="text-center mb-4">
+          <span className="text-blue-400 text-sm">
+            Showing search results •
+          </span>
+          <button
+            onClick={handleClearSearch}
+            className="text-blue-400 hover:text-blue-300 text-sm ml-2 underline"
+          >
+            View date-based fixtures
+          </button>
+        </div>
+      )}
+
+      {/* Validation message for date mode */}
+      {!isSearchMode && !isDateValid && searchDate && (
         <div className="text-yellow-600 text-center mb-2">
           The date provided is not valid. Showing fixtures for today's date
           instead.
         </div>
       )}
 
-      {error && !data && (
-        <div className="text-red-500">
-          Error fetching fixtures {error.message}
+      {/* Search validation */}
+      {isSearchMode && searchQuery.length > 0 && searchQuery.length <= 2 && (
+        <div className="text-yellow-600 text-center mb-2">
+          Please enter at least 3 characters to search.
         </div>
       )}
 
+      {/* Error Display */}
+      {error && !data && (
+        <div className="text-red-500 text-center">
+          Error fetching {isSearchMode ? "search results" : "fixtures"}:{" "}
+          {error.message}
+        </div>
+      )}
+
+      {/* Loading */}
       {isFetching && (
         <div className="flex flex-col items-center justify-center py-8">
           <div className="relative">
             <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
           </div>
           <p className="mt-4 text-blue-600 font-medium text-lg">
-            Loading fixtures...
+            {isSearchMode ? "Searching fixtures..." : "Loading fixtures..."}
           </p>
         </div>
       )}
 
+      {/* No Results */}
       {data?.data && !isFetching && data.data.data?.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12">
-          <div className="text-6xl mb-4">📅</div>
+          <div className="text-6xl mb-4">{isSearchMode ? "🔍" : "📅"}</div>
           <h3 className="text-xl font-semibold text-gray-600 mb-2">
-            No Fixtures Available
+            {isSearchMode ? "No Search Results" : "No Fixtures Available"}
           </h3>
           <p className="text-gray-500 text-center">
-            There are no fixtures scheduled for this date.
+            {isSearchMode
+              ? `No fixtures found for "${searchQuery}". Try a different search term.`
+              : "There are no fixtures scheduled for this date."}
           </p>
         </div>
       )}
 
-      {data?.data &&
-        !isFetching &&
-        (data.data.data?.length ?? 0) > 0 &&
-        data.data.data?.map((fixture) => (
-          <FixtureCard
-            key={fixture.id}
-            fixture={fixture}
-            setShowMatchDetails={setShowMatchDetails}
-          />
-        ))}
-      {showMatchDetails && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Background overlay */}
-          <div
-            className="absolute inset-0 bg-black/20 bg-opacity-50 backdrop-blur-sm"
-            onClick={() => setShowMatchDetails(null)}
-          />
-          {/* Content */}
-          <div className="relative z-10 max-w-2xl w-full mx-4 max-h-[90vh] overflow-auto">
-            <div className="bg-white rounded-xl shadow-2xl p-6">
-              {/* Header */}
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Match Details
-                </h2>
-                <button
-                  onClick={() => setShowMatchDetails(null)}
-                  className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
-                >
-                  ×
-                </button>
-              </div>
-
-              {/* Match Info */}
-              <div className="space-y-4">
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                    {showMatchDetails.league.name}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    {formatDate(
-                      showMatchDetails.starting_at,
-                      "MMMM d, yyyy 'at' HH:mm"
-                    )}
-                  </p>
-                </div>
-
-                {/* Teams */}
-                <div className="flex justify-between items-center py-6 text-black">
-                  <div className="text-center flex-1">
-                    <div className="flex flex-col items-center mb-4">
-                      <div className="mb-3">
-                        <Image
-                          src={
-                            showMatchDetails.participants?.find(
-                              (team) => team.meta.location === "home"
-                            )?.image_path || teamImagePlaceHolder
-                          }
-                          alt="Home Team Logo"
-                          width={60}
-                          height={60}
-                          className="rounded-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = teamImagePlaceHolder;
-                          }}
-                          unoptimized
-                        />
-                      </div>
-                      <div className="text-lg font-bold">
-                        {showMatchDetails.participants?.find(
-                          (team) => team.meta.location === "home"
-                        )?.name || "Home Team"}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-2xl font-bold text-gray-400 mx-4">
-                    VS
-                  </div>
-                  <div className="text-center flex-1">
-                    <div className="flex flex-col items-center mb-4">
-                      <div className="mb-3">
-                        <Image
-                          src={
-                            showMatchDetails.participants?.find(
-                              (team) => team.meta.location === "away"
-                            )?.image_path || teamImagePlaceHolder
-                          }
-                          alt="Away Team Logo"
-                          width={60}
-                          height={60}
-                          className="rounded-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = teamImagePlaceHolder;
-                          }}
-                          unoptimized
-                        />
-                      </div>
-                      <div className="text-lg font-bold">
-                        {showMatchDetails.participants?.find(
-                          (team) => team.meta.location === "away"
-                        )?.name || "Away Team"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Predictions */}
-                {showMatchDetails.predictions &&
-                  showMatchDetails.predictions.length > 0 && (
-                    <div>
-                      <h4 className="text-lg font-semibold mb-4">
-                        Match Predictions
-                      </h4>
-                      {showMatchDetails.predictions.map((prediction) => (
-                        <div key={prediction.id} className="mb-4">
-                          <div className="flex justify-between text-sm mb-2 text-gray-600">
-                            <span>
-                              Home Win: {prediction.predictions.home}%
-                            </span>
-                            <span>Draw: {prediction.predictions.draw}%</span>
-                            <span>
-                              Away Win: {prediction.predictions.away}%
-                            </span>
-                          </div>
-                          <div className="flex w-full h-6 rounded-lg overflow-hidden border border-gray-300">
-                            <div
-                              className="bg-green-500 flex items-center justify-center text-white text-xs font-medium"
-                              style={{
-                                width: `${prediction.predictions.home}%`,
-                              }}
-                            >
-                              {prediction.predictions.home > 20 &&
-                                `${prediction.predictions.home}%`}
-                            </div>
-                            <div
-                              className="bg-gray-500 flex items-center justify-center text-white text-xs font-medium"
-                              style={{
-                                width: `${prediction.predictions.draw}%`,
-                              }}
-                            >
-                              {prediction.predictions.draw > 20 &&
-                                `${prediction.predictions.draw}%`}
-                            </div>
-                            <div
-                              className="bg-red-500 flex items-center justify-center text-white text-xs font-medium"
-                              style={{
-                                width: `${prediction.predictions.away}%`,
-                              }}
-                            >
-                              {prediction.predictions.away > 20 &&
-                                `${prediction.predictions.away}%`}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                {/* Additional Match Info */}
-                <div className="border-t pt-4 mt-6">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="font-semibold text-gray-600">
-                        League:
-                      </span>
-                      <p>{showMatchDetails.league.name}</p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-gray-600">
-                        Country:
-                      </span>
-                      <p>{showMatchDetails.league.country.name}</p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-gray-600">
-                        Match ID:
-                      </span>
-                      <p>{showMatchDetails.id}</p>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-gray-600">
-                        Status:
-                      </span>
-                      {/* <p>{showMatchDetails.state?.state || "Scheduled"}</p> */}
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* Results */}
+      {data?.data && !isFetching && (data.data.data?.length ?? 0) > 0 && (
+        <div>
+          {isSearchMode && (
+            <div className="text-gray-400 text-sm mb-4 text-center">
+              Found {data.data.data?.length} fixture(s)
             </div>
-          </div>
+          )}
+          {data.data.data?.map((fixture) => (
+            <FixtureCard
+              key={fixture.id}
+              fixture={fixture}
+              setShowMatchDetails={setShowMatchDetails}
+            />
+          ))}
         </div>
       )}
+
+      <MatchDetailsModal
+        fixture={showMatchDetails}
+        onClose={() => setShowMatchDetails(null)}
+      />
     </div>
   );
 };

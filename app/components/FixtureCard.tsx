@@ -93,19 +93,16 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
         {fixture.predictions?.map((prediction) => (
           <div key={prediction.id} className="">
             <div className="flex justify-between text-sm mb-1 text-gray-300">
-              <span className="sm:w-2/5 w-1/3 flex sm:justify-end justify-center">
+              <span className="sm:w-2/5 w-1/3 flex sm:justify-end justify-center ">
                 <span className="sm:block hidden mr-1">Home: </span>{" "}
-                <span className="sm:hidden block mr-1">H: </span>{" "}
                 <span> {prediction.predictions.home}%</span>
               </span>
               <span className="sm:1/5 w-1/3 flex justify-center">
                 <span className="sm:block hidden mr-1">Draw: </span>{" "}
-                <span className="sm:hidden block mr-1">D: </span>{" "}
                 <span>{prediction.predictions.draw}%</span>
               </span>
               <span className="sm:w-2/5 w-1/3 flex sm:justify-start justify-center">
                 <span className="sm:block hidden mr-1">Away: </span>{" "}
-                <span className="sm:hidden block mr-1">A: </span>{" "}
                 <span> {prediction.predictions.away}%</span>
               </span>
             </div>
