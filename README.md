@@ -1,18 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BWS Frontend Task - Football Fixtures & Predictions App
+
+A modern web application built with Next.js that displays football fixtures and predictions with an intuitive user interface.
+
+## Features
+
+### 🏈 Fixture Management
+
+- **Date-based Fixtures**: View fixtures for any specific date
+- **Calendar Integration**: Interactive calendar picker for easy date selection
+- **Team Search**: Search fixtures by team name with real-time results
+- **Match Details**: Detailed modal view for each fixture with team information
+
+### 📊 Predictions & Analytics
+
+- **Match Predictions**: Visual prediction bars showing win/draw probabilities
+- **Color-coded Results**: Green (home win), Gray (draw), Red (away win)
+- **Percentage Display**: Clear percentage indicators for each outcome
+
+### 🎨 User Interface
+
+- **Dark Theme**: Modern dark UI with accent colors
+- **Responsive Design**: Optimized for desktop and mobile devices
+- **Loading States**: Smooth loading animations and feedback
+- **Error Handling**: User-friendly error messages and fallbacks
+- **Modal Overlays**: Clean overlay system for enhanced user experience
+
+### 🔍 Search & Navigation
+
+- **Real-time Search**: Auto-search as you type (3+ characters)
+- **Search Mode Toggle**: Easy switching between date and search views
+- **Date Validation**: Intelligent date validation with fallbacks
+- **Empty States**: Helpful messages when no results are found
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: React Query (TanStack Query)
+- **Date Handling**: date-fns
+- **Icons**: React Icons
+- **HTTP Client**: Axios
+- **Image Optimization**: Next.js Image component
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18.x or later
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd bws-frontend-task
+   ```
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   # or
+   bun install
+   ```
+3. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   # or
+   bun dev
+   ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

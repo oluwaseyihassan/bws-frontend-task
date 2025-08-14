@@ -9,9 +9,8 @@ export const getPredictions = async (date: string, filterByPercentage: number = 
   return response.data;
 };
 
-
 export const getFixturesByName = async (name: string) => {
-  const response = await api.get(`/prediction/name/${name}?include=predictions.type;participants;league.country&filters=todayDate`);
+  const response = await api.get(`/prediction/name/${name}?include=predictions.type;participants;league.country&filters=todayDate;predictionTypes:237`);
   console.log(response.data)
   if (response.status < 200 || response.status >= 300) {
     throw new Error('Failed to fetch fixtures');
