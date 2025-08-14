@@ -16,6 +16,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { validateDate } from "../utils/validator";
+import { RxCross2 } from "react-icons/rx";
 
 interface CalendarProps {
   selectedDate: string;
@@ -146,7 +147,13 @@ const Calendar = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border border-gray-200 absolute z-50">
+    <div className="bg-gray-300 rounded-xl shadow-lg p-4 mb-6 border border-gray-200 absolute z-50">
+      <button
+        onClick={() => setIsCalendarOpen(false)}
+        className="text-black flex justify-end  w-full  "
+      >
+        <RxCross2 className="hover:bg-gray-200/40 rounded w-6 h-6 text-lg" />
+      </button>
       {Header()}
       {Days()}
       {Cells()}
@@ -155,7 +162,7 @@ const Calendar = ({
           Selected: {formatDate(selectedDate, "MMMM d, yyyy")}
         </div>
         <button
-          className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors duration-200 font-medium"
+          className="w-full bg-accent text-white py-3 px-4 rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors duration-200 font-medium"
           onClick={() => {
             setSelectedDate(formatDate(today, "yyyy-MM-dd"));
             if (getMonth(today) !== getMonth(currentMonth)) {
@@ -167,7 +174,7 @@ const Calendar = ({
             setIsCalendarOpen(false);
           }}
         >
-          Go to Today
+          Today
         </button>
       </div>
     </div>

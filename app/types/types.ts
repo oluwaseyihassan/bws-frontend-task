@@ -1,6 +1,11 @@
 export type FixturesResponse = {
-    data: Fixtures[] | null;
-    pagination: Pagination;
+    status: "success" | "error";
+    data?: {
+        data: Fixtures[] | null;
+        pagination: Pagination;
+    };
+    message: string;
+    error?: string;
 } | null
 
 export interface Fixtures {
@@ -9,6 +14,7 @@ export interface Fixtures {
     name: string;
     starting_at: string;
     result_info: string;
+    league: League;
     predictions: Array<{
         id: number;
         fixture_id: number;
@@ -52,4 +58,17 @@ export interface Participants {
         location: string;
         winner: boolean | null;
     }
+}
+
+export interface League {
+    id: number;
+    name: string;
+    image_path: string;
+    country: Country;
+}
+
+export interface Country {
+    id: number;
+    name: string;
+    image_path: string | null;
 }

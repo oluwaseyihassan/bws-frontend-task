@@ -11,8 +11,8 @@ export default function PredictionsLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="max-w-4xl m-auto p-4 bg-dark-bg-1">
-      <h1 className="font-bold text-2xl text-center">Predictions App</h1>
+    <div className="max-w-[1280px] m-auto p-4 ">
+      <h1 className="font-bold text-2xl text-center bg-dark-bg-1 py-4 rounded-lg mb-4">Predictions App</h1>
       {children}
     </div>
   );

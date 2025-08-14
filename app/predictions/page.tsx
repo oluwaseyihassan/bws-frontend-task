@@ -26,8 +26,7 @@ const page = async ({
   });
 
   return (
-    <div>
-      Predictions Page
+    <div className="bg-dark-bg-1 rounded-lg">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Fixtures />
       </HydrationBoundary>
