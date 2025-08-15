@@ -1,6 +1,6 @@
 import api from "./api";
 
-export const getPredictions = async (date: string, filterByPercentage: number = 0) => {
+export const getPredictions = async (date: string, filterByPercentage: number = 50) => {
   const response = await api.get(`/prediction/${date}?include=predictions.type;participants;league.country&filters=predictionTypes:237&filterByPercentage=${filterByPercentage}`);
   if (response.status < 200 || response.status >= 300) {
     throw new Error('Failed to fetch predictions');
