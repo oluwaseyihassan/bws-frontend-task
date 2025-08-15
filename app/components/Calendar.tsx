@@ -110,11 +110,10 @@ const Calendar = ({
             className={`
               w-12 h-12 text-center rounded-lg transition-all duration-200 font-medium text-sm relative
               ${
-                !isToday && (
-                  !isCurrentMonth
-                    ? "text-gray-400 hover:text-black hover:bg-blue-50"
-                    : "hover:bg-gray-100 hover:text-black"
-                )
+                !isToday &&
+                (!isCurrentMonth
+                  ? "text-gray-400 hover:text-black hover:bg-blue-50"
+                  : "hover:bg-gray-100 hover:text-black")
               }
               ${
                 isToday
@@ -123,7 +122,7 @@ const Calendar = ({
               }
               ${
                 isSelectedDay && !isToday
-                  ? "after:content-[''] after:block after:w-2 after:h-2 after:rounded-full after:bg-accent after:shadow-md after:absolute after:left-1/2 after:-translate-x-1/2"
+                  ? "after:content-[''] after:block after:w-4 after:h-1 after:rounded-full after:bg-accent after:shadow-md after:absolute after:left-1/2 after:-translate-x-1/2"
                   : ""
               }
               ${!isSelectedDay && !isToday ? "hover:shadow-sm" : ""}
@@ -149,7 +148,7 @@ const Calendar = ({
   };
 
   return (
-    <div className="bg-dark-bg rounded-xl shadow-lg p-4 mb-6 border border-accent absolute z-50">
+    <div className="bg-dark-bg rounded-xl shadow-lg p-4 mb-6 border border-accent/40 absolute z-50">
       <button
         onClick={() => setIsCalendarOpen(false)}
         className="text-white absolute right-4 top-4"
@@ -159,12 +158,12 @@ const Calendar = ({
       {Header()}
       {Days()}
       {Cells()}
-      <div className="mt-6 pt-4 border-t border-gray-400">
+      <div className="mt-6 pt-4 border-t border-gray-400/20">
         <div className="text-sm text-white mb-3 text-center">
           Selected: {formatDate(selectedDate, "MMMM d, yyyy")}
         </div>
         <button
-          className="w-full bg-accent text-white py-3 px-4 rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-2 transition-colors duration-200 font-medium"
+          className="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-2 transition-colors duration-200 font-medium"
           onClick={() => {
             setSelectedDate(formatDate(today, "yyyy-MM-dd"));
             if (getMonth(today) !== getMonth(currentMonth)) {
