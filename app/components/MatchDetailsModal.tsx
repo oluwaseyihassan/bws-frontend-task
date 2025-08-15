@@ -17,7 +17,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
   if (!fixture) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center text-black">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Background overlay */}
       <div
         className="absolute inset-0 bg-black/20 bg-opacity-50 backdrop-blur-sm"
@@ -25,10 +25,10 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
       />
       {/* Content */}
       <div className="relative z-10 max-w-2xl w-full mx-4 max-h-[90vh] overflow-auto">
-        <div className="bg-white rounded-xl shadow-2xl p-6">
+        <div className="bg-dark-bg-1 rounded-xl shadow-2xl p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Match Details</h2>
+            <h2 className="text-2xl font-bold text-accent">Match Details</h2>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
@@ -51,16 +51,17 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                   className="object-cover w-full h-full"
                 />
               </div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                {fixture.league.name}
+              <h3 className="text-lg font-semibold mb-2">
+                {fixture.league.name}{" "}
+                <span className="text-gray-400">({fixture.league.country.name})</span>
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-400">
                 {formatDate(fixture.starting_at, "MMMM d, yyyy 'at' HH:mm")}
               </p>
             </div>
 
             {/* Teams */}
-            <div className="flex justify-between items-center py-6 text-black">
+            <div className="flex justify-between items-center py-6">
               <div className="text-center flex-1">
                 <div className="flex flex-col items-center mb-4">
                   <div className="mb-3">
@@ -87,7 +88,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="text-2xl font-bold text-gray-400 mx-4">VS</div>
+              <div className="text-2xl font-bold mx-4">VS</div>
               <div className="text-center flex-1">
                 <div className="flex flex-col items-center mb-4">
                   <div className="mb-3">
@@ -124,14 +125,14 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                 </h4>
                 {fixture.predictions.map((prediction) => (
                   <div key={prediction.id} className="mb-4">
-                    <div className="flex justify-between text-sm mb-2 text-gray-600">
+                    <div className="flex justify-between text-sm mb-2">
                       <span>Home Win: {prediction.predictions.home}%</span>
                       <span>Draw: {prediction.predictions.draw}%</span>
                       <span>Away Win: {prediction.predictions.away}%</span>
                     </div>
-                    <div className="flex w-full h-6 rounded-lg overflow-hidden border border-gray-300">
+                    <div className="flex w-full h-6 rounded-lg overflow-hidden text-black">
                       <div
-                        className="bg-green-500 flex items-center justify-center text-white text-xs font-medium"
+                        className="bg-green-500 flex items-center justify-center text-xs font-medium"
                         style={{
                           width: `${prediction.predictions.home}%`,
                         }}
@@ -140,7 +141,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                           `${prediction.predictions.home}%`}
                       </div>
                       <div
-                        className="bg-gray-500 flex items-center justify-center text-white text-xs font-medium"
+                        className="bg-gray-400 flex items-center justify-center text-xs font-medium"
                         style={{
                           width: `${prediction.predictions.draw}%`,
                         }}
@@ -149,7 +150,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                           `${prediction.predictions.draw}%`}
                       </div>
                       <div
-                        className="bg-red-500 flex items-center justify-center text-white text-xs font-medium"
+                        className="bg-red-500 flex items-center justify-center text-xs font-medium"
                         style={{
                           width: `${prediction.predictions.away}%`,
                         }}
@@ -162,24 +163,6 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                 ))}
               </div>
             )}
-
-            {/* Additional Match Info */}
-            <div className="border-t pt-4 mt-6">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-semibold text-gray-600">League:</span>
-                  <p>{fixture.league.name}</p>
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-600">Country:</span>
-                  <p>{fixture.league.country.name}</p>
-                </div>
-                <div>
-                  <span className="font-semibold text-gray-600">Match ID:</span>
-                  <p>{fixture.id}</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

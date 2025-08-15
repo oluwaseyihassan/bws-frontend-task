@@ -42,19 +42,19 @@ const Calendar = ({
   );
 
   const Header = () => (
-    <div className="flex items-center justify-between mb-6 px-2">
+    <div className="flex items-center justify-between mb-6 px-2 mt-4">
       <button
         onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-        className="p-3 hover:bg-blue-100 rounded-full text-blue-600 cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="p-3 hover:bg-accent/10 rounded-full text-accent cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent"
       >
         <IoIosArrowBack size={20} />
       </button>
-      <h2 className="text-xl font-bold text-gray-800">
+      <h2 className="text-xl font-bold text-white">
         {formatDate(currentMonth, "MMMM yyyy")}
       </h2>
       <button
         onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-        className="p-3 hover:bg-blue-100 rounded-full text-blue-600 cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="p-3 hover:bg-accent/10 rounded-full text-accent cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent"
       >
         <IoIosArrowForward size={20} />
       </button>
@@ -68,7 +68,7 @@ const Calendar = ({
       days.push(
         <div
           key={i}
-          className="text-center py-3 text-sm font-semibold text-gray-600 uppercase tracking-wide"
+          className="text-center py-3 text-sm font-semibold text-gray-300 uppercase tracking-wide"
         >
           {formatDate(addDays(startOfWeek(date), i), "EEE")}
         </div>
@@ -108,24 +108,26 @@ const Calendar = ({
               setIsCalendarOpen(false);
             }}
             className={`
-              w-12 h-12 text-center rounded-lg transition-all duration-200 font-medium text-sm
+              w-12 h-12 text-center rounded-lg transition-all duration-200 font-medium text-sm relative
               ${
-                !isCurrentMonth
-                  ? "text-gray-400 hover:bg-gray-100"
-                  : "text-gray-800 hover:bg-blue-50"
+                !isToday && (
+                  !isCurrentMonth
+                    ? "text-gray-400 hover:text-black hover:bg-blue-50"
+                    : "hover:bg-gray-100 hover:text-black"
+                )
               }
               ${
                 isToday
-                  ? "bg-blue-600 text-white hover:bg-blue-700 shadow-lg"
+                  ? "bg-accent text-white hover:bg-accent/80 shadow-lg"
                   : ""
               }
               ${
                 isSelectedDay && !isToday
-                  ? "bg-green-500 text-white shadow-md"
+                  ? "after:content-[''] after:block after:w-2 after:h-2 after:rounded-full after:bg-accent after:shadow-md after:absolute after:left-1/2 after:-translate-x-1/2"
                   : ""
               }
               ${!isSelectedDay && !isToday ? "hover:shadow-sm" : ""}
-              focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+              focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-1
             `}
           >
             {formatDate(day, "d")}
@@ -147,22 +149,22 @@ const Calendar = ({
   };
 
   return (
-    <div className="bg-gray-300 rounded-xl shadow-lg p-4 mb-6 border border-gray-200 absolute z-50">
+    <div className="bg-dark-bg rounded-xl shadow-lg p-4 mb-6 border border-accent absolute z-50">
       <button
         onClick={() => setIsCalendarOpen(false)}
-        className="text-black flex justify-end  w-full  "
+        className="text-white absolute right-4 top-4"
       >
-        <RxCross2 className="hover:bg-gray-200/40 rounded w-6 h-6 text-lg" />
+        <RxCross2 className="hover:bg-accent/10 rounded w-6 h-6 text-lg" />
       </button>
       {Header()}
       {Days()}
       {Cells()}
-      <div className="mt-6 pt-4 border-t border-gray-200">
-        <div className="text-sm text-gray-600 mb-3 text-center">
+      <div className="mt-6 pt-4 border-t border-gray-400">
+        <div className="text-sm text-white mb-3 text-center">
           Selected: {formatDate(selectedDate, "MMMM d, yyyy")}
         </div>
         <button
-          className="w-full bg-accent text-white py-3 px-4 rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors duration-200 font-medium"
+          className="w-full bg-accent text-white py-3 px-4 rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-1 focus:ring-accent focus:ring-offset-2 transition-colors duration-200 font-medium"
           onClick={() => {
             setSelectedDate(formatDate(today, "yyyy-MM-dd"));
             if (getMonth(today) !== getMonth(currentMonth)) {
