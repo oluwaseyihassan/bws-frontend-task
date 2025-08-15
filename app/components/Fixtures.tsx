@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { validateDate } from "../utils/validator";
 import FixtureCard from "./FixtureCard";
 import MatchDetailsModal from "./MatchDetailsModal";
-import { IoIosCalendar, IoMdStarOutline, IoMdClose } from "react-icons/io";
+import { IoIosCalendar, IoMdClose, IoMdSearch } from "react-icons/io";
 
 const Fixtures = () => {
   const searchParams = useSearchParams();
@@ -96,7 +96,7 @@ const Fixtures = () => {
               onClick={() => {
                 setIsCalendarOpen(!isCalendarOpen);
               }}
-              className="cursor-pointer border border-gray-400/40 text-white px-4 py-2 rounded-lg shadow-md hover:bg-accent transition-colors duration-200 w-fit flex items-center gap-x-2"
+              className="cursor-pointer border border-gray-400/40 text-white px-4 py-2 rounded-lg shadow-md hover:border-accent transition-colors duration-200 w-fit flex items-center gap-x-2 bg-dark-bg"
             >
               <IoIosCalendar />
               {formatDate(selectedDate, "MMMM d, yyyy")}
@@ -113,16 +113,16 @@ const Fixtures = () => {
         )}
 
         {/* Search Bar */}
-        <div className="flex-1">
+        <div className="">
           <form onSubmit={handleSearch} className="relative">
             <div className="relative">
-              <IoMdStarOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <IoMdSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchInputChange}
-                placeholder="Search fixtures by team name..."
-                className="w-full pl-10 pr-10 py-2 border border-gray-400/40 rounded-lg bg-dark-bg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter team name..."
+                className="w-full pl-10 pr-10 py-2 border border-gray-400/40 rounded-lg bg-dark-bg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-accent focus:border-transparent"
               />
               {searchQuery && (
                 <button
@@ -216,7 +216,7 @@ const Fixtures = () => {
               Found {data.data.data?.length} fixture(s)
             </div>
           )}
-          {data.data.data?.map((fixture) => (
+          {data.data.data?.sort((a, b) => a.league_id - b.league_id).map((fixture) => (
             <FixtureCard
               key={fixture.id}
               fixture={fixture}
