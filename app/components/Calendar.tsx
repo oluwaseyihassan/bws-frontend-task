@@ -45,7 +45,7 @@ const Calendar = ({
     <div className="flex items-center justify-between mb-6 px-2 mt-4">
       <button
         onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-        className="p-3 hover:bg-accent/10 rounded-full text-accent cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent"
+        className="p-2 hover:bg-accent/10 rounded-lg text-accent cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent"
       >
         <IoIosArrowBack size={20} />
       </button>
@@ -54,7 +54,7 @@ const Calendar = ({
       </h2>
       <button
         onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-        className="p-3 hover:bg-accent/10 rounded-full text-accent cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent"
+        className="p-2 hover:bg-accent/10 rounded-lg text-accent cursor-pointer transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-accent"
       >
         <IoIosArrowForward size={20} />
       </button>
