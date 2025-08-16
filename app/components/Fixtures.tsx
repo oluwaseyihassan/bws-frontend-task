@@ -135,7 +135,7 @@ const Fixtures = () => {
           )}
         </div>
       </div>
-      <div className="flex justify-between gap-4">
+      <div className="flex justify-between gap-4 mb-2">
         {/* Date Picker */}
         <div>
           <div
