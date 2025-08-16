@@ -135,14 +135,14 @@ const Fixtures = () => {
           )}
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row gap-4 mb-2 justify-between">
+      <div className="flex justify-between gap-4">
         {/* Date Picker */}
         <div>
           <div
             onClick={() => {
               setIsCalendarOpen(!isCalendarOpen);
             }}
-            className="cursor-pointer border border-gray-400/40 text-white px-4 py-2 rounded-lg shadow-md hover:border-accent transition-colors duration-200 w-fit flex items-center gap-x-2 bg-dark-bg text-sm mb-2"
+            className="cursor-pointer border border-gray-400/40 text-white px-4 py-2 rounded-lg shadow-md hover:border-accent transition-colors duration-200 w-fit flex items-center gap-x-2 bg-dark-bg text-sm"
           >
             <IoIosCalendar />
             {formatDate(selectedDate, "MMM d, yyyy")}
