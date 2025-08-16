@@ -48,7 +48,7 @@ const DropDown: React.FC<DropDownProps> = ({
   };
 
   return (
-    <div className="relative w-[150px] " ref={dropdownRef}>
+    <div className="relative w-[180px] " ref={dropdownRef}>
       {/* Dropdown Button */}
       <div
         onClick={handleToggle}
