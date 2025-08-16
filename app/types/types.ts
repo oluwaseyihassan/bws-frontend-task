@@ -24,12 +24,7 @@ export interface Fixtures {
             draw: number;
         }
         type_id: number;
-        type: {
-            id: number;
-            name: string;
-            code: string;
-            developer_name: string;
-        }
+        type: Type;
     }> | null | [];
     participants: Array<{
         id: number;
@@ -40,6 +35,15 @@ export interface Fixtures {
             winner: boolean;
         }
     }> ;
+    scores: Scores[] | [];
+    state: State;
+}
+
+export interface Type {
+    id: number;
+    name: string;
+    code: string;
+    developer_name: string;
 }
 
 export interface Pagination {
@@ -71,4 +75,23 @@ export interface Country {
     id: number;
     name: string;
     image_path: string | null;
+}
+
+export interface Scores {
+    id: number;
+    fixture_id: number;
+    participant_id: number;
+    type_id: number;
+    score: {
+        goals: number;
+        participant: string;
+    };
+    type: Type;
+}
+
+export interface State {
+    id: number;
+    state: string;
+    name: string;
+    developer_name: string;
 }

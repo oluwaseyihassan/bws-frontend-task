@@ -63,7 +63,36 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
           </div>
         </div>
         <div className="flex-1 text-center flex justify-center">
-          <div className="bg-dark-bg-1 rounded py-1 px-3 w-fit">{formatDate(fixture.starting_at, "HH:mm")}</div>
+          {fixture.scores.length > 0 &&
+          fixture.state.developer_name !== "NS" ? (
+            <div
+              className={`${
+                fixture.state.developer_name === "FT"
+                  ? "bg-dark-bg-1"
+                  : "bg-red-500"
+              } flex gap-x-2  rounded-lg py-1 px-3 w-fit`}
+            >
+              {
+                fixture.scores?.find(
+                  (score) =>
+                    score.type.developer_name === "CURRENT" &&
+                    score.score.participant === "home"
+                )?.score?.goals
+              }
+              {" - "}
+              {
+                fixture.scores?.find(
+                  (score) =>
+                    score.type.developer_name === "CURRENT" &&
+                    score.score.participant === "away"
+                )?.score?.goals
+              }
+            </div>
+          ) : (
+            <div className="bg-dark-bg-1 rounded-lg py-1 px-3 w-fit">
+              {formatDate(fixture.starting_at, "HH:mm")}
+            </div>
+          )}
         </div>
         <div className="flex gap-x-2 items-center w-2/5 text-center flex-col sm:flex-row">
           <div>
@@ -93,7 +122,7 @@ const FixtureCard: React.FC<FixtureCardProp> = ({
         {fixture.predictions?.map((prediction) => (
           <div key={prediction.id} className="">
             <div className="flex justify-between text-sm mb-1 text-gray-300">
-              <span className="sm:w-2/5 w-1/3 flex sm:justify-end justify-center ">
+              <span className="sm:w-2/5 w-1/3 flex sm:justify-end justify-center">
                 <span className="sm:block hidden mr-1">Home: </span>{" "}
                 <span> {prediction.predictions.home}%</span>
               </span>
